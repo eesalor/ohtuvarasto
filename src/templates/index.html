@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Warehouse Manager - Home{% endblock %}
+
+{% block content %}
+    <h1>🏪 Warehouse Manager</h1>
+    
+    <div class="actions">
+        <a href="{{ url_for('create_warehouse') }}" class="btn">+ Create New Warehouse</a>
+    </div>
+    
+    {% if warehouses %}
+        <h2 style="margin-top: 30px;">Your Warehouses</h2>
+        
+        {% for warehouse in warehouses %}
+            <div class="warehouse-card">
+                <div class="warehouse-info">
+                    <div>
+                        <h3>{{ warehouse.name }}</h3>
+                        <p style="color: #666;">Warehouse #{{ warehouse.id }}</p>
+                    </div>
+                    <div class="actions">
+                        <a href="{{ url_for('view_warehouse', warehouse_id=warehouse.id) }}" class="btn">View Details</a>
+                        <a href="{{ url_for('edit_warehouse', warehouse_id=warehouse.id) }}" class="btn btn-secondary">Edit</a>
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Current Balance</div>
+                        <div class="stat-value">{{ "%.2f"|format(warehouse.varasto.saldo) }}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Total Capacity</div>
+                        <div class="stat-value">{{ "%.2f"|format(warehouse.varasto.tilavuus) }}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Available Space</div>
+                        <div class="stat-value">{{ "%.2f"|format(warehouse.varasto.paljonko_mahtuu()) }}</div>
+                    </div>
+                </div>
+                
+                <div class="progress-bar">
+                    {% set percentage = (warehouse.varasto.saldo / warehouse.varasto.tilavuus * 100) if warehouse.varasto.tilavuus > 0 else 0 %}
+                    <div class="progress-fill" style="width: {{ percentage }}%">
+                        {{ "%.1f"|format(percentage) }}% Full
+                    </div>
+                </div>
+                
+                {% if warehouse.products %}
+                    <div style="margin-top: 15px;">
+                        <strong>Products:</strong>
+                        {% for product, qty in warehouse.products.items() %}
+                            <span style="display: inline-block; background: white; padding: 5px 10px; border-radius: 5px; margin: 5px 5px 0 0; border: 1px solid #ddd;">
+                                {{ product }}: {{ "%.2f"|format(qty) }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 60px 20px; color: #666;">
+            <h2>No warehouses yet</h2>
+            <p style="margin: 20px 0;">Create your first warehouse to get started!</p>
+            <a href="{{ url_for('create_warehouse') }}" class="btn">+ Create Warehouse</a>
+        </div>
+    {% endif %}
+{% endblock %}

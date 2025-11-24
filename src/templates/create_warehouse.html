@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Create Warehouse{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('index') }}" class="back-link">← Back to Warehouses</a>
+    
+    <h1>Create New Warehouse</h1>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Warehouse Name:</label>
+            <input type="text" id="name" name="name" required placeholder="e.g., Main Storage, Fruit Depot">
+        </div>
+        
+        <div class="form-group">
+            <label for="capacity">Capacity:</label>
+            <input type="number" id="capacity" name="capacity" step="0.01" min="0.01" required placeholder="e.g., 100.00">
+            <small style="color: #666; display: block; margin-top: 5px;">Total storage capacity in units</small>
+        </div>
+        
+        <div class="actions">
+            <button type="submit" class="btn">Create Warehouse</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+{% endblock %}
