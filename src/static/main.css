@@ -226,6 +226,11 @@ tr:hover {
     align-items: center;
 }
 
+.actions form {
+    margin-top: 0;
+    display: inline-block;
+}
+
 /* Small text helper */
 small {
     color: #666;
