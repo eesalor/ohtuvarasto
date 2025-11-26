@@ -144,11 +144,7 @@ class WarehouseManager:
 
     def _validate_update(self, conn, warehouse_id, name, capacity):
         """Validate warehouse update parameters."""
-        cursor = conn.execute(
-            "SELECT * FROM warehouses WHERE id = ?",
-            (warehouse_id,)
-        )
-        row = cursor.fetchone()
+        row = self._get_warehouse(conn, warehouse_id)
         if row is None:
             return None, "Warehouse not found"
 
@@ -164,7 +160,7 @@ class WarehouseManager:
         """Update warehouse name and capacity."""
         conn = self._get_connection()
         try:
-            _, error = self._validate_update(
+            _warehouse_row, error = self._validate_update(
                 conn, warehouse_id, name, capacity
             )
             if error:

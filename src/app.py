@@ -9,13 +9,21 @@ app.secret_key = 'warehouse-secret-key-12345'
 manager = WarehouseManager()
 
 
+def _parse_float(value):
+    """Parse a float value from form input, returning None on failure."""
+    try:
+        return float(value) if value else None
+    except (ValueError, TypeError):
+        return None
+
+
 def _handle_create_post():
     """Handle POST request for warehouse creation."""
     name = request.form.get('name')
-    capacity = float(request.form.get('capacity'))
+    capacity = _parse_float(request.form.get('capacity'))
     warehouse_type = request.form.get('warehouse_type', 'fruit')
 
-    if not (name and capacity > 0):
+    if not (name and capacity and capacity > 0):
         flash('Invalid warehouse data!', 'error')
         return None
 
@@ -61,9 +69,9 @@ def _flash_update_result(success, message):
 def _handle_warehouse_update(warehouse_id):
     """Handle warehouse update from POST request."""
     name = request.form.get('name')
-    capacity = float(request.form.get('capacity'))
+    capacity = _parse_float(request.form.get('capacity'))
 
-    if not (name and capacity > 0):
+    if not (name and capacity and capacity > 0):
         flash('Invalid warehouse data!', 'error')
         return
 
@@ -117,9 +125,9 @@ def add_product(warehouse_id):
         return redirect(url_for('index'))
 
     product_name = _get_product_name(warehouse)
-    quantity = float(request.form.get('quantity'))
+    quantity = _parse_float(request.form.get('quantity'))
 
-    if product_name and quantity > 0:
+    if product_name and quantity and quantity > 0:
         _handle_add_product(warehouse_id, product_name, quantity)
     else:
         flash('Invalid product data!', 'error')
