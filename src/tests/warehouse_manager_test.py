@@ -176,9 +176,9 @@ class TestWarehouseManager(unittest.TestCase):
         ):
             with mock.patch.object(
                 self.manager, '_get_connection'
-            ) as mock_conn:
-                mock_cursor = mock.MagicMock()
-                mock_cursor.execute.side_effect = sqlite3.IntegrityError
-                mock_conn.return_value = mock_cursor
+            ) as mock_get_conn:
+                mock_conn = mock.MagicMock()
+                mock_conn.execute.side_effect = sqlite3.IntegrityError
+                mock_get_conn.return_value = mock_conn
                 result = self.manager.create_warehouse("Test", 100.0)
                 self.assertIsNone(result)
