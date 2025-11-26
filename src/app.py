@@ -158,7 +158,7 @@ def delete_warehouse(warehouse_id):
     return redirect(url_for('index'))
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     import os
     debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
     app.run(debug=debug_mode)
